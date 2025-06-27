@@ -80,27 +80,8 @@ method to change integer to roman number
 hash map roman_mapping was given
 input number -> roman number
 example:
-n = 1954 -> M CM L IV
-roman = ''
-base = 1000
-n / base = 1,..
-n % base = 954
-1,.. * base = 1000
-1000 in map? yes -> 'M'
-roman.push('M')
-n = 954
-base /= 10
-
-n / base = 9,..
-n % base = 54
-9,.. * base = 900
-900 in map? yes -> 'CM'
-roman.push('CM')
-n = 54
-base /= 10
-etc..
+n = 1954 -> MCMLIV
 =end
-
 
 def to_roman(n)
   roman_mapping = {
@@ -130,4 +111,42 @@ def to_roman(n)
   end
 end
 
-puts to_roman(2878)
+# puts to_roman(2878)
+
+=begin
+method to convert roman number to integer
+the logic here is that n.start_with?(key)
+checks if the input roman starts with any of the hash keys
+then it does a recursive call
+but the n in this case will be smaller
+split the n with the found key in the hash
+keep calling until n.empty? is true
+=end
+def roman_to_integer(n)
+  roman_mapping = {
+    "M" => 1000,
+    "CM" => 900,
+    "D" => 500,
+    "CD" => 400,
+    "C" => 100,
+    "XC" => 90,
+    "L" => 50,
+    "XL" => 40,
+    "X" => 10,
+    "IX" => 9,
+    "V" => 5,
+    "IV" => 4,
+    "I" => 1
+  }
+  # base case
+  return 0 if n.empty?
+
+  # recursive case
+  roman_mapping.each do |key, value|
+    if n.start_with?(key)
+      return value + roman_to_integer(n[key.length..-1])
+    end
+  end
+end
+
+# puts roman_to_integer('MCMLIV')
